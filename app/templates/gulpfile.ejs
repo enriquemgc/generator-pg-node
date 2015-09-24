@@ -1,0 +1,73 @@
+'use strict';
+
+var gulp = require('gulp');
+var nodeP; // stores a node process
+var spawn = require('child_process').spawn;
+var concat = require('gulp-concat');
+var del = require('del');
+var gutil = require('gulp-util');
+<% if (language === ts) { -%>
+<%- "var ts = require('gulp-typescript');" %>
+<%- "var merge = require('merge2');" %>
+<% } -%>
+
+
+// configuration variables ---------------------------------------------
+
+// node app file relative path (i.e. "backend/app.js")
+var appFileRelPath = '.'; // "." so node looks for package.json main indications
+// Files to watch for node reloading (i.e. ['scripts/**/*.js', 'scripts/*.js'])
+var filesToWatch = <%- JSON.stringify(filesToWatch) %>;
+
+
+// tasks --------------------------------------------------------------
+
+// clean up if an error goes unhandled.
+process.on('exit', function () {
+  if (nodeP) nodeP.kill();
+});
+
+
+// (load || reload) node
+gulp.task('node', ['processJsFiles'], function () {
+  // if node is already running, kill it, if not run a new instance
+  if (nodeP) nodeP.kill()
+  
+  nodeP = spawn('node', [appFileRelPath], { stdio: 'inherit' });
+
+  nodeP.on('close', function(code) { 
+    if (code === 8) { gutil.log('Error detected, waiting for changes...'); }
+    });
+});
+
+
+// watch for changes in node related files. On change run node task
+gulp.task('watchScripts', ['processJsFiles'], function () {
+  gulp.watch(filesToWatch, ['clean', 'processJsFiles', 'node']);
+});
+
+
+gulp.task('clean', function () {
+  return del(['dist/scripts/main.js']).then();
+});
+
+
+gulp.task('processJsFiles', ['clean'], function () {
+<% if (language === ts) { -%>
+  <%- "var tsProject = ts.createProject('tsconfig.json', { sortOutput: true });" %>
+  <%- "var resStream = tsProject.src('./**/*.ts')" %>
+    <%- ".pipe(ts(tsProject));" %>
+    <%- "// Merge the two output streams, so this task is finished when the IO of both operations are done." %>
+  <%- "return merge([ "%>
+    <%- "resStream.dts.pipe(gulp.dest('dist/typeDefinitions'))," %>
+    <%- "resStream.js.pipe(gulp.dest('dist'))" %>
+  <%- "]);" %>
+<% } %>
+});
+
+
+
+// default » clean » processJsFiles |» node
+//                                  |» watchScripts
+gulp.task('default', ['clean', 'processJsFiles', 'node', 'watchScripts' ], function () {
+});

@@ -1,0 +1,35 @@
+{
+  "name": "generator-pg-node",
+  "version": "1.0.0",
+  "description": "node.js + gulp.js [+ TypeScript] playground for trying out code on node.js with libraries on the fly. It also manages TypeScript",
+  "license": "MIT",
+  "author": {
+    "name": "Enrique Martínez",
+    "email": "enriquemgc@gmail.com",
+    "url": "https://github.com/enriquemgc"
+  },
+  "keywords": [
+    "yeoman-generator",
+    "playground",
+    "node",
+    "typescript"
+  ],
+  "scripts": {
+    "test": "gulp mocha"
+  },
+  "dependencies": {
+    "lodash": "^3.10.1",
+    "underscore.string": "^3.1.1",
+    "yeoman-generator": "^0.20.2",
+    "chalk": "^1.0.0"
+  },
+  "files": [],
+  "devDependencies": {
+    "eslint": "^1.4.1",
+    "gulp": "^3.9.0",
+    "jshint": "^2.8.0"
+  },
+  "engines": {
+    "node": ">=0.10.0"
+  }
+}

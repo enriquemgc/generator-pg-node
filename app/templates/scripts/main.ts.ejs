@@ -1,0 +1,7 @@
+/// <reference path="../typings/tsd.d.ts" />
+
+<% if (modules) { modules.forEach(function(module){ -%>
+import * as <%= module.varLikeName %> from '<%= module.name %>';
+<% }); } %>
+
+

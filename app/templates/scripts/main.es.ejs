@@ -1,0 +1,5 @@
+'use strict';
+
+<% if (modules) { modules.forEach(function(module){ -%>
+var <%- module.varLikeName %> = require('<%- module.name %>');
+<% }); } %>
