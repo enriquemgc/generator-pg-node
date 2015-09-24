@@ -1,6 +1,6 @@
 {
   "name": "generator-pg-node",
-  "version": "1.0.2",
+  "version": "1.0.1",
   "description": "node.js + gulp.js [+ TypeScript] playground for trying out code on node.js with libraries on the fly. It also manages TypeScript",
   "license": "MIT",
   "author": {
